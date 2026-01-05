@@ -14,13 +14,21 @@ const numberRegex = /^-?\d+(\.\d+)?$/;
 let lastResult = null;
 
 const units = {
-  temp: ["C", "F", "K", "R"],
   length: ["km","hm","dam","m","dm","cm","mm"],
-  mass: ["kg","hg","dag","g","dg","cg","mg"]
+  mass: ["kg","hg","dag","g","dg","cg","mg"],
+  temp: ["C","F","K","R"]
 };
 
 let history = JSON.parse(localStorage.getItem("history")) || [];
 
+/* ===== Helper Display Unit (° untuk suhu) ===== */
+function displayUnit(unit, category) {
+  if (category !== "temp") return unit;
+  if (unit === "K") return "K";
+  return `°${unit}`;
+}
+
+/* ===== Populate Units ===== */
 function populateUnits() {
   const cat = categorySelect.value;
   fromUnit.innerHTML = "";
@@ -35,16 +43,29 @@ categorySelect.addEventListener("change", () => {
   populateUnits();
   dynamicInsight.textContent =
     categorySelect.value === "temp"
-      ? "Konversi suhu tidak linear karena perbedaan titik nol."
-      : "Konversi berbasis satuan SI dengan faktor 10.";
+      ? "Suhu tidak linear karena titik nol berbeda."
+      : "Tangga satuan SI: turun dikali 10, naik dibagi 10.";
 });
 
 populateUnits();
 
+/* ===== Format Number ===== */
+function formatScientific(value) {
+  if (value === 0) return "0";
+  const exp = Math.floor(Math.log10(Math.abs(value)));
+  const man = value / Math.pow(10, exp);
+  return `${man.toFixed(3)} × 10^${exp}`;
+}
+
 function formatNumber(value) {
   return notationToggle.checked
-    ? value.toExponential(4)
+    ? formatScientific(value)
     : Number(value.toFixed(6)).toString();
+}
+
+/* ===== Conversion ===== */
+function convertSI(value, from, to, list) {
+  return value * Math.pow(10, list.indexOf(to) - list.indexOf(from));
 }
 
 function convertTemperature(v, from, to) {
@@ -60,10 +81,7 @@ function convertTemperature(v, from, to) {
   if (to === "R") return c * 4/5;
 }
 
-function convertSI(v, from, to, list) {
-  return v * Math.pow(10, list.indexOf(from) - list.indexOf(to));
-}
-
+/* ===== History ===== */
 function renderHistory() {
   historyList.innerHTML = "";
   history.forEach(item => {
@@ -72,51 +90,50 @@ function renderHistory() {
     historyList.appendChild(li);
   });
 }
-
 renderHistory();
 
+/* ===== Submit ===== */
 form.addEventListener("submit", e => {
   e.preventDefault();
-  const val = valueInput.value.trim();
+  const raw = valueInput.value.trim();
 
-  if (!numberRegex.test(val)) {
+  if (!numberRegex.test(raw)) {
     errorMsg.textContent = "Masukkan angka valid";
     return;
   }
-
   errorMsg.textContent = "";
-  const num = parseFloat(val);
+
+  const num = parseFloat(raw);
   let result;
 
   if (categorySelect.value === "temp") {
     result = convertTemperature(num, fromUnit.value, toUnit.value);
   } else {
-    result = convertSI(
-      num,
-      fromUnit.value,
-      toUnit.value,
-      units[categorySelect.value]
-    );
+    result = convertSI(num, fromUnit.value, toUnit.value, units[categorySelect.value]);
   }
 
   lastResult = result;
 
-  const display = `${num} ${fromUnit.value} = ${formatNumber(result)} ${toUnit.value}`;
-  resultDiv.textContent = display;
+  const output =
+    `${num} ${displayUnit(fromUnit.value, categorySelect.value)} = ${formatNumber(result)} ${displayUnit(toUnit.value, categorySelect.value)}`;
 
-  history.unshift(display);
+  resultDiv.textContent = output;
+
+  history.unshift(output);
   history = history.slice(0, 10);
   localStorage.setItem("history", JSON.stringify(history));
   renderHistory();
 });
 
+/* ===== Toggle Notation ===== */
 notationToggle.addEventListener("change", () => {
   if (lastResult !== null) {
     resultDiv.textContent =
-      `${valueInput.value} ${fromUnit.value} = ${formatNumber(lastResult)} ${toUnit.value}`;
+      `${valueInput.value} ${displayUnit(fromUnit.value, categorySelect.value)} = ${formatNumber(lastResult)} ${displayUnit(toUnit.value, categorySelect.value)}`;
   }
 });
 
+/* ===== Clear History ===== */
 clearHistoryBtn.addEventListener("click", () => {
   history = [];
   localStorage.removeItem("history");
