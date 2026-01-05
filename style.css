@@ -1,0 +1,87 @@
+body {
+  font-family: system-ui, sans-serif;
+  background: #f9fafb;
+  display: flex;
+  justify-content: center;
+  padding: 60px 16px;
+  color: #111827;
+}
+
+.container {
+  max-width: 480px;
+  width: 100%;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.05);
+}
+
+h1, h3 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input, select, button {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: .95rem;
+}
+
+input, select {
+  border: 1px solid #e5e7eb;
+}
+
+button {
+  background: #6366f1;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #4f46e5;
+}
+
+#error {
+  color: #ef4444;
+  font-size: .85rem;
+}
+
+#result {
+  margin-top: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.toggle {
+  margin-top: 12px;
+  text-align: center;
+  font-size: .85rem;
+}
+
+.history {
+  margin-top: 24px;
+}
+
+.history ul {
+  list-style: none;
+  padding: 0;
+}
+
+.history li {
+  font-size: .85rem;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 4px;
+}
+
+.info {
+  margin-top: 24px;
+  font-size: .85rem;
+  color: #374151;
+}
