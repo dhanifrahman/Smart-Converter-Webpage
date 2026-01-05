@@ -1,77 +1,74 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Universal STEM Converter</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Converter</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <main class="container">
+    <h1>🔄 Smart Converter</h1>
 
-<div class="container">
-  <h1>🔄 Smart Converter</h1>
+    <form id="converterForm">
+      <input
+        type="text"
+        id="valueInput"
+        placeholder="Masukkan nilai"
+        required
+      />
 
-  <form id="converterForm">
-    <input type="text" id="valueInput" placeholder="Masukkan nilai (contoh: 0.00025)">
+      <select id="category">
+        <option value="length">Panjang</option>
+        <option value="mass">Berat</option>
+        <option value="temp">Suhu</option>
+      </select>
 
-    <select id="category">
-      <option value="temp">Suhu</option>
-      <option value="length">Panjang</option>
-      <option value="mass">Berat / Massa</option>
-    </select>
+      <div class="unit-row">
+        <select id="fromUnit"></select>
+        <span class="to-label">Ke</span>
+        <select id="toUnit"></select>
+      </div>
 
-    <select id="fromUnit"></select>
-    <select id="toUnit"></select>
+      <button type="submit">Konversi</button>
+    </form>
 
-    <button type="submit">Konversi</button>
-  </form>
+    <p id="error"></p>
+    <div id="result"></div>
 
-  <p id="error"></p>
+    <div class="toggle">
+      <label>
+        <input type="checkbox" id="notationToggle">
+        Tampilkan Notasi Ilmiah
+      </label>
+    </div>
 
-  <div id="result"></div>
+    <section class="history">
+      <h2>⏱️ Riwayat Konversi</h2>
+      <ul id="historyList"></ul>
+      <button id="clearHistory">Hapus Riwayat</button>
+    </section>
 
-  <div class="toggle">
-    <label>
-      <input type="checkbox" id="notationToggle">
-      Tampilkan Notasi Ilmiah
-    </label>
-  </div>
+    <section class="insight">
+      <h2>💡 Insight & Tips</h2>
+      <p id="dynamicInsight">
+        Konversi SI menggunakan sistem basis 10 berpangkat.
+      </p>
+      <ul>
+        <li><strong>10⁶</strong> = Mega (M)</li>
+        <li><strong>10⁹</strong> = Giga (G)</li>
+        <li><strong>10¹²</strong> = Tera (T)</li>
+        <li><strong>10⁻⁶</strong> = Mikro (µ)</li>
+        <li><strong>10⁻⁹</strong> = Nano (n)</li>
+        <li><strong>10⁻¹²</strong> = Piko (p)</li>
+      </ul>
+      <p>
+        Dalam sains & engineering, angka sangat besar atau kecil
+        ditulis menggunakan notasi ilmiah agar lebih ringkas dan akurat.
+      </p>
+    </section>
+  </main>
 
-  <!-- HISTORY -->
-  <section class="history">
-    <h3>🕘 Riwayat Konversi</h3>
-    <ul id="historyList"></ul>
-    <button id="clearHistory">Hapus Riwayat</button>
-  </section>
-
-  <!-- INSIGHT & TIPS -->
-  <section class="info">
-    <h3>💡 Insight & Tips</h3>
-
-    <p>
-      Dalam STEM, konversi satuan dilakukan dengan menyimpan nilai
-      dalam <strong>satuan dasar SI</strong> lalu dikonversi
-      menggunakan pangkat 10.
-    </p>
-
-    <ul>
-      <li><strong>1 × 10⁶</strong> = Mega</li>
-      <li><strong>1 × 10⁻⁶</strong> = Mikro</li>
-      <li><strong>1 × 10⁻⁹</strong> = Nano</li>
-      <li><strong>1 × 10⁻¹²</strong> = Piko</li>
-    </ul>
-
-    <p>
-      ⚠️ Suhu berbeda dengan satuan SI lain karena memiliki titik nol berbeda,
-      sehingga konversinya <strong>tidak linear</strong>.
-    </p>
-
-    <p id="dynamicInsight">
-      Pilih kategori untuk melihat insight tambahan.
-    </p>
-  </section>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
